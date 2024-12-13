@@ -1,0 +1,27 @@
+<launch>
+  <!--zyp  3220241236-->
+  <arg name="x_pos" default="-4.0"/>
+  <arg name="y_pos" default="-4.0"/>
+  <arg name="z_pos" default="0.0"/>
+  <arg name="gui" default="true"/>
+  <arg name="world_name" default="mapok" />
+    <!-- 将 Urdf 文件的内容加载到参数服务器 -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find racecar_description)/urdf/cubecar_model.urdf.xacro'"/>
+    <!-- 启动 gazebo -->
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="use_gui" value="false" />
+    
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find racecar_gazebo)/worlds/$(arg world_name).world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+    <!-- 在 gazebo 中显示机器人模型 -->
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"
+        args="-urdf -model sunny -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+        
+</launch>
